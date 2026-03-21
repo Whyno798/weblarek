@@ -1,4 +1,3 @@
-// src/components/Models/Cart.ts
 import { IProduct } from "../../types";
 
 export class Cart {

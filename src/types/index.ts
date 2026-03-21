@@ -26,3 +26,16 @@ export interface IBuyer {
 }
 
 export type TPayment = "card | cash";
+
+export type ApiResponseProducts = {
+  items: IProduct[];
+};
+
+export type ApiOrderRequest = {
+  items: IProduct[];
+  buyer: IBuyer;
+};
+
+export type ApiOrderResponse = {
+  total: number;
+};

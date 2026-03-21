@@ -1,4 +1,3 @@
-// src/components/Models/Catalog.ts
 import { IProduct } from "../../types";
 
 export class Catalog {

@@ -1,4 +1,3 @@
-// src/components/Models/Buyer.ts
 import { IBuyer, TPayment } from "../../types";
 
 export class Buyer {
