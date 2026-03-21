@@ -25,9 +25,15 @@ export interface IBuyer {
   address: string;
 }
 
+export interface IOrder extends IBuyer {
+  items: string[];
+  total: number;
+}
+
 export type TPayment = "card | cash";
 
 export type ApiResponseProducts = {
+  total: number;
   items: IProduct[];
 };
 
@@ -37,5 +43,6 @@ export type ApiOrderRequest = {
 };
 
 export type ApiOrderResponse = {
+  id: string;
   total: number;
 };

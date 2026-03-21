@@ -62,9 +62,9 @@ console.log("\n=== ТЕСТИРОВАНИЕ ЗАВЕРШЕНО ===");
 console.log("\n4. Интеграция с сервером:");
 
 import { Api } from "./components/base/Api.js";
-import { ApiService } from "./components/base/ApiService.js";
+import { ApiService } from "./components/Comunication/ApiService.js";
 
-const api = new Api("http://localhost:5173");
+const api = new Api(import.meta.env.VITE_API_ORIGIN);
 const apiService = new ApiService(api);
 
 async function mockServerResponse() {
