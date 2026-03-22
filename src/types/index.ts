@@ -37,11 +37,6 @@ export type ApiResponseProducts = {
   items: IProduct[];
 };
 
-export type ApiOrderRequest = {
-  items: IProduct[];
-  buyer: IBuyer;
-};
-
 export type ApiOrderResponse = {
   id: string;
   total: number;

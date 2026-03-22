@@ -63,8 +63,9 @@ console.log("\n4. Интеграция с сервером:");
 
 import { Api } from "./components/base/Api.js";
 import { ApiService } from "./components/Comunication/ApiService.js";
+import { API_URL } from "./utils/constants.js";
 
-const api = new Api(import.meta.env.VITE_API_ORIGIN);
+const api = new Api(API_URL);
 const apiService = new ApiService(api);
 
 async function mockServerResponse() {
