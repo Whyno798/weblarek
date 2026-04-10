@@ -1,4 +1,5 @@
 import { IBuyer, TPayment } from "../../types";
+import { IEvents } from "../base/Events";
 
 export class Buyer {
   private payment: TPayment | null = null;
@@ -6,20 +7,26 @@ export class Buyer {
   private phone: string = "";
   private address: string = "";
 
+  constructor(protected events: IEvents) {}
+
   setPayment(payment: TPayment): void {
     this.payment = payment;
+    this.events.emit("order:changed", this.getData());
   }
 
   setEmail(email: string): void {
     this.email = email;
+    this.events.emit("contacts:changed", this.getData());
   }
 
   setPhone(phone: string): void {
     this.phone = phone;
+    this.events.emit("contacts:changed", this.getData());
   }
 
   setAddress(address: string): void {
     this.address = address;
+    this.events.emit("order:changed", this.getData());
   }
 
   getData(): Partial<IBuyer> {
@@ -36,6 +43,9 @@ export class Buyer {
     this.email = "";
     this.phone = "";
     this.address = "";
+
+    this.events.emit("order:changed", this.getData());
+    this.events.emit("contacts:changed", this.getData());
   }
 
   validate(): Record<string, string> | null {
