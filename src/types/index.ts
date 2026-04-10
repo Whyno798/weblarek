@@ -30,7 +30,7 @@ export interface IOrder extends IBuyer {
   total: number;
 }
 
-export type TPayment = "card | cash";
+export type TPayment = 'card' | 'cash';
 
 export type ApiResponseProducts = {
   total: number;
