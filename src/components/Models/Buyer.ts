@@ -51,11 +51,26 @@ export class Buyer {
   validate(): Record<string, string> | null {
     const errors: Record<string, string> = {};
 
-    if (!this.payment) errors.payment = "Не выбран вид оплаты";
-    if (!this.email.trim()) errors.email = "Укажите email";
-    if (!this.phone.trim()) errors.phone = "Укажите телефон";
-    if (!this.address.trim()) errors.address = "Укажите адрес";
+    if (!this.payment) {
+      errors.payment = "Не выбран вид оплаты";
+    }
 
-    return Object.keys(errors).length > 0 ? errors : null;
+    if (!this.address.trim()) {
+      errors.address = "Укажите адрес";
+    }
+
+    if (!this.email.trim()) {
+      errors.email = "Укажите email";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+      errors.email = "Некорректный email";
+    }
+
+    if (!this.phone.trim()) {
+      errors.phone = "Укажите телефон";
+    } else if (!/^\+?\d[\d\s\-()]{9,}$/.test(this.phone)) {
+      errors.phone = "Некорректный телефон";
+    }
+
+    return Object.keys(errors).length ? errors : null;
   }
 }

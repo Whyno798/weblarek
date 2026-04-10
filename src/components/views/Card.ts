@@ -2,7 +2,7 @@ import { Component } from "../base/Component";
 import { IEvents } from "../base/Events";
 import { IProduct } from "../../types";
 import { ensureElement } from "../../utils/utils";
-import { categoryMap } from "../../utils/constants";
+import { categoryMap, CDN_URL } from "../../utils/constants";
 
 export class Card extends Component<IProduct> {
   protected _titleElement: HTMLElement;
@@ -52,22 +52,22 @@ export class Card extends Component<IProduct> {
 
   set category(value: string) {
     if (!this._categoryElement) {
-        return;
+      return;
     }
 
-    this._categoryElement.className = 'card__category';
+    this._categoryElement.className = "card__category";
     const categoryClass = categoryMap[value as keyof typeof categoryMap];
 
     if (categoryClass) {
-        this._categoryElement.classList.add(categoryClass);
+      this._categoryElement.classList.add(categoryClass);
     }
 
     this._categoryElement.textContent = value;
-}
+  }
 
   set image(value: string) {
     if (this._imageElement) {
-      this._imageElement.src = value;
+      this._imageElement.src = `${CDN_URL}${value}`;
       this._imageElement.alt = this.title || "";
     }
   }

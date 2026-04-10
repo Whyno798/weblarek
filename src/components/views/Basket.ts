@@ -23,7 +23,7 @@ export class Basket extends Component<IBasketView> {
       this.container,
     );
     this._totalElement = ensureElement<HTMLElement>(
-      ".dasket__price",
+      ".basket__price",
       this.container,
     );
     this._buttonElement = ensureElement<HTMLButtonElement>(

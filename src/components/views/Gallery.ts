@@ -5,8 +5,15 @@ interface IGalleryData {
 }
 
 export class Gallery extends Component<IGalleryData> {
+  protected _list: HTMLElement;
+
+  constructor(container: HTMLElement) {
+    super(container);
+    this._list = container;
+  }
+
   set items(items: HTMLElement[]) {
-    this.container.replaceChildren(...items);
+    this._list.replaceChildren(...items);
   }
 
   render(data?: Partial<IGalleryData>): HTMLElement {
