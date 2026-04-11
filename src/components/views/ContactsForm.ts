@@ -29,8 +29,6 @@ export class ContactsForm extends Form<IBuyer> {
   }
 
   render(data?: Partial<IBuyer>): HTMLElement {
-    super.render(data);
-
     this.email = data?.email || "";
     this.phone = data?.phone || "";
 

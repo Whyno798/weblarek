@@ -1,32 +1,23 @@
-import { Card } from "./Card";
-import { IProduct } from "../../types";
 import { IEvents } from "../base/Events";
 import { ensureElement } from "../../utils/utils";
+import { ProductCard } from "./ProductCard";
+import { IProduct } from "../../types";
 
-export class PreviewCard extends Card {
+export class PreviewCard extends ProductCard {
   protected _descriptionElement: HTMLElement;
   protected _buttonElement: HTMLButtonElement;
-  protected _inBasket = false;
 
   constructor(container: HTMLElement, events: IEvents) {
     super(container, events);
 
-    this._descriptionElement = ensureElement<HTMLElement>(
-      ".card__text",
-      this.container,
-    );
-
+    this._descriptionElement = ensureElement(".card__text", container);
     this._buttonElement = ensureElement<HTMLButtonElement>(
       ".card__button",
-      this.container,
+      container,
     );
 
     this._buttonElement.addEventListener("click", () => {
-      if (this._inBasket) {
-        this.events.emit("basket:remove", { id: this._id });
-      } else {
-        this.events.emit("card:add", { id: this._id });
-      }
+      events.emit("card:add");
     });
   }
 
@@ -42,13 +33,8 @@ export class PreviewCard extends Card {
     this._buttonElement.textContent = value;
   }
 
-  set inBasket(value: boolean) {
-    this._inBasket = value;
-    this.buttonText = value ? "Удалить из корзины" : "В корзину";
-  }
-
-  render(data?: Partial<IProduct>): HTMLElement {
-    super.render(data);
-    return this.container;
+  render(product: IProduct): HTMLElement {
+    this.container.dataset.id = product.id;
+    return super.render(product);
   }
 }

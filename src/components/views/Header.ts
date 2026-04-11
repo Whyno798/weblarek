@@ -32,12 +32,6 @@ export class Header extends Component<IHeaderData> {
 
   set counter(value: number) {
     this._counterElement.textContent = value.toString();
-
-    if (value > 0) {
-      this._counterElement.classList.remove("hidden");
-    } else {
-      this._counterElement.classList.add("hidden");
-    }
   }
 
   render(data?: Partial<IHeaderData>): HTMLElement {

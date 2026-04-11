@@ -12,20 +12,20 @@ export class Cart {
 
   addItem(product: IProduct): void {
     this.items.push(product);
-    this.events.emit("basket:changed", { items: this.items });
+    this.events.emit("basket:changed");
   }
 
-  removeItem(product: IProduct): void {
-    const index = this.items.findIndex((item) => item.id === product.id);
+  removeItem(id: string): void {
+    const index = this.items.findIndex((item) => item.id === id);
     if (index > -1) {
       this.items.splice(index, 1);
     }
-    this.events.emit("basket:changed", { items: this.items });
+    this.events.emit("basket:changed");
   }
 
   clear(): void {
     this.items = [];
-    this.events.emit("basket:changed", { items: this.items });
+    this.events.emit("basket:changed");
   }
 
   getTotalPrice(): number {

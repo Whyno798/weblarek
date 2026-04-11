@@ -1,26 +1,30 @@
 import { Card } from "./Card";
-import { IProduct } from "../../types";
 import { IEvents } from "../base/Events";
 import { ensureElement } from "../../utils/utils";
+import { IProduct } from "../../types";
 
 export class BasketCard extends Card {
   protected _indexElement: HTMLElement;
   protected _buttonElement: HTMLButtonElement;
 
-  constructor(container: HTMLElement, events: IEvents) {
+  constructor(
+    container: HTMLElement,
+    events: IEvents,
+    protected removeCallBack: (id: string) => void,
+  ) {
     super(container, events);
 
-    this._indexElement = ensureElement<HTMLElement>(
-      ".basket__item-index",
-      this.container,
-    );
+    this._indexElement = ensureElement(".basket__item-index", container);
     this._buttonElement = ensureElement<HTMLButtonElement>(
       ".basket__item-delete",
-      this.container,
+      container,
     );
 
     this._buttonElement.addEventListener("click", () => {
-      this.events.emit("basket:remove", { id: this._id });
+      const id = container.dataset.id;
+      if (id) {
+        this.removeCallBack(id);
+      }
     });
   }
 
@@ -28,11 +32,8 @@ export class BasketCard extends Card {
     this._indexElement.textContent = String(value);
   }
 
-  render(data?: Partial<IProduct> & { index?: number }): HTMLElement {
-    super.render(data);
-    if (typeof data?.index === "number") {
-      this.index = data.index;
-    }
-    return this.container;
+  render(product: IProduct): HTMLElement {
+    this.container.dataset.id = product.id;
+    return super.render(product);
   }
 }

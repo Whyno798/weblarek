@@ -1,18 +1,24 @@
-import { Card } from "./Card";
-import { IProduct } from "../../types";
+import { ProductCard } from "./ProductCard";
 import { IEvents } from "../base/Events";
+import { IProduct } from "../../types";
 
-export class CatalogCard extends Card {
-  constructor(container: HTMLElement, events: IEvents) {
+export class CatalogCard extends ProductCard {
+  constructor(
+    container: HTMLElement,
+    protected events: IEvents,
+  ) {
     super(container, events);
 
-    this.container.addEventListener("click", () => {
-      this.events.emit("card:select", { id: this._id });
+    container.addEventListener("click", () => {
+      const id = container.dataset.id;
+      if (id) {
+        this.events.emit("card:select", { id });
+      }
     });
   }
 
-  render(data?: Partial<IProduct>): HTMLElement {
-    super.render(data);
-    return this.container;
+  render(product: IProduct): HTMLElement {
+    this.container.dataset.id = product.id;
+    return super.render(product);
   }
 }

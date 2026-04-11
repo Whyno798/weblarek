@@ -1,47 +1,41 @@
 import { Form } from "./Form";
 import { IBuyer, TPayment } from "../../types";
 import { IEvents } from "../base/Events";
-import { ensureElement } from "../../utils/utils";
+import { ensureAllElements, ensureElement } from "../../utils/utils";
 
 export class OrderForm extends Form<IBuyer> {
-  protected _cardButton: HTMLButtonElement;
-  protected _cashButton: HTMLButtonElement;
+  protected _buttons: HTMLButtonElement[];
   protected _addressInput: HTMLInputElement;
 
   constructor(container: HTMLFormElement, events: IEvents) {
     super(container, events);
 
-    this._cardButton = ensureElement<HTMLButtonElement>(
-      'button[name="card"]',
+    this._buttons = ensureAllElements<HTMLButtonElement>(
+      ".order__buttons .button",
       this.container,
     );
-    this._cashButton = ensureElement<HTMLButtonElement>(
-      'button[name="cash"]',
-      this.container,
-    );
+
     this._addressInput = ensureElement<HTMLInputElement>(
       'input[name="address"]',
       this.container,
     );
 
-    this._cardButton.addEventListener("click", () => {
-      this.events.emit("order.payment:change", {
-        field: "payment",
-        value: "card",
-      });
-    });
-
-    this._cashButton.addEventListener("click", () => {
-      this.events.emit("order.payment:change", {
-        field: "payment",
-        value: "cash",
+    this._buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.name as TPayment;
+        this.payment = value;
+        this.events.emit("order.payment:change", {
+          field: "payment",
+          value,
+        });
       });
     });
   }
 
-  set payment(value: TPayment | null) {
-    this._cardButton.classList.toggle("button_alt-active", value === "card");
-    this._cashButton.classList.toggle("button_alt-active", value === "cash");
+  set payment(value: TPayment) {
+    this._buttons.forEach((button) => {
+      button.classList.toggle("button_alt-active", button.name === value);
+    });
   }
 
   set address(value: string) {
@@ -49,11 +43,14 @@ export class OrderForm extends Form<IBuyer> {
   }
 
   render(data?: Partial<IBuyer>): HTMLElement {
-    super.render(data);
+    if (data?.payment) {
+      this.payment = data.payment;
+    }
 
-    this.payment = data?.payment || null;
-    this.address = data?.address || "";
+    if (data?.address !== undefined) {
+      this.address = data.address;
+    }
 
-    return this.container;
+    return super.render(data);
   }
 }
