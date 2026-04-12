@@ -77,7 +77,7 @@ function renderBasket(): void {
     const basketCard = new BasketCard(
       cloneTemplate("#card-basket"),
       events,
-      (id: string) => events.emit("basket:remove", { id }),
+      () => events.emit("basket:remove", { id: product.id }),
     );
 
     basketCard.index = index + 1;
@@ -119,15 +119,13 @@ function updatePreviewState(): void {
   const isUnavailable = product.price === null;
   const isInBasket = cart.hasItem(product.id);
 
-  previewCard.disabled = isUnavailable || isInBasket;
-
-  if (isUnavailable) {
-    previewCard.buttonText = "Недоступно";
-  } else if (isInBasket) {
-    previewCard.buttonText = "Уже в корзине";
-  } else {
-    previewCard.buttonText = "В корзину";
-  }
+  previewCard.inBasket = isInBasket;
+  previewCard.disabled = isUnavailable;
+  previewCard.buttonText = isUnavailable
+    ? "Недоступно"
+    : isInBasket
+      ? "Удалить из корзины"
+      : "В корзину";
 }
 
 function renderPreview(): void {
@@ -181,10 +179,9 @@ function getOrderData() {
 // --------------------
 events.on("catalog:changed", () => {
   const cards = catalog.getProducts().map((product: IProduct) => {
-    const card = new CatalogCard(cloneTemplate("#card-catalog"), events);
-    card.title = product.title;
-    card.category = product.category;
-    card.price = product.price;
+    const card = new CatalogCard(cloneTemplate("#card-catalog"), events, () =>
+      events.emit("card:select", { id: product.id }),
+    );
 
     return card.render({
       ...product,
@@ -206,14 +203,18 @@ events.on("card:select", (data: { id: string }) => {
 // --------------------
 // События корзины
 // --------------------
-events.on("card:add", () => {
+events.on("card:toggle", () => {
   const product = catalog.getSelectedProduct();
 
-  if (!product || product.price === null || cart.hasItem(product.id)) {
+  if (!product || product.price === null) {
     return;
   }
 
-  cart.addItem(product);
+  if (cart.hasItem(product.id)) {
+    cart.removeItem(product.id);
+  } else {
+    cart.addItem(product);
+  }
 });
 
 events.on("basket:open", () => {

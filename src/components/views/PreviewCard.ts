@@ -6,6 +6,7 @@ import { IProduct } from "../../types";
 export class PreviewCard extends ProductCard {
   protected _descriptionElement: HTMLElement;
   protected _buttonElement: HTMLButtonElement;
+  protected _inBasket = false;
 
   constructor(container: HTMLElement, events: IEvents) {
     super(container, events);
@@ -17,7 +18,7 @@ export class PreviewCard extends ProductCard {
     );
 
     this._buttonElement.addEventListener("click", () => {
-      events.emit("card:add");
+      this.events.emit("card:toggle");
     });
   }
 
@@ -32,9 +33,11 @@ export class PreviewCard extends ProductCard {
   set buttonText(value: string) {
     this._buttonElement.textContent = value;
   }
+  set inBasket(value: boolean) {
+    this._inBasket = value;
+  }
 
   render(product: IProduct): HTMLElement {
-    this.container.dataset.id = product.id;
     return super.render(product);
   }
 }

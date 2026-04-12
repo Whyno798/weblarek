@@ -6,19 +6,16 @@ export class CatalogCard extends ProductCard {
   constructor(
     container: HTMLElement,
     protected events: IEvents,
+    protected onClick: () => void,
   ) {
     super(container, events);
 
     container.addEventListener("click", () => {
-      const id = container.dataset.id;
-      if (id) {
-        this.events.emit("card:select", { id });
-      }
+      this.onClick();
     });
   }
 
   render(product: IProduct): HTMLElement {
-    this.container.dataset.id = product.id;
     return super.render(product);
   }
 }

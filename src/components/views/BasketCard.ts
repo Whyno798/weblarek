@@ -10,7 +10,7 @@ export class BasketCard extends Card {
   constructor(
     container: HTMLElement,
     events: IEvents,
-    protected removeCallBack: (id: string) => void,
+    protected removeCallBack: () => void,
   ) {
     super(container, events);
 
@@ -21,10 +21,7 @@ export class BasketCard extends Card {
     );
 
     this._buttonElement.addEventListener("click", () => {
-      const id = container.dataset.id;
-      if (id) {
-        this.removeCallBack(id);
-      }
+      this.removeCallBack();
     });
   }
 
@@ -33,7 +30,6 @@ export class BasketCard extends Card {
   }
 
   render(product: IProduct): HTMLElement {
-    this.container.dataset.id = product.id;
     return super.render(product);
   }
 }

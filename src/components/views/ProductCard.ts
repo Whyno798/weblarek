@@ -2,6 +2,7 @@ import { Card } from "./Card";
 import { ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/Events";
 import { IProduct } from "../../types";
+import { categoryMap } from "../../utils/constants";
 
 export class ProductCard extends Card {
   protected imageElement!: HTMLImageElement;
@@ -22,6 +23,17 @@ export class ProductCard extends Card {
   }
 
   set category(value: string) {
+    if (!this.categoryElement) {
+      return;
+    }
+
+    this.categoryElement.className = "card__category";
+    const categoryClass = categoryMap[value as keyof typeof categoryMap];
+
+    if (categoryClass) {
+      this.categoryElement.classList.add(categoryClass);
+    }
+
     this.categoryElement.textContent = value;
   }
 
